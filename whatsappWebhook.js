@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-const faqController = require("../controllers/faqController");
+const faqController = require("./faqController");
 
 // WhatsApp API 設定，請用你申請的TOKEN和PHONE_NUMBER_ID替換
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN || "你的WHATSAPP_TOKEN";

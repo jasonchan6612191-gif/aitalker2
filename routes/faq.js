@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const faqController = require("../controllers/faqController");
+const faqController = require("../faqController");
 
 router.get("/", (req, res) => {
   res.json(faqController.getAllFaqs());

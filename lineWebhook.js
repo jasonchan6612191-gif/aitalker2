@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-const faqController = require("../controllers/faqController");
+const faqController = require("./faqController");
 
 // LINE Channel Access Token，請改成自己的
 const LINE_ACCESS_TOKEN =
