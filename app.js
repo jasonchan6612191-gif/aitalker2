@@ -17,17 +17,21 @@ mongoose.connect(process.env.MONGO_URI, {
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
 });
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
+});
 
+// 請求 JSON Body 解析器
 app.use(bodyParser.json());
 
-// 靜態資源提供（供前端打包檔案用，根據實際編譯結果設置）
+// 靜態資源提供（供前端打包檔案用）
 app.use(express.static(path.join(__dirname, "my-vue-app/dist")));
 
-// 路由
+// API 路由
 app.use("/api/faq", faqRouter);
 app.use("/api/message", messageRouter);
 
-// SPA fallback，回應 index.html
+// 沒有匹配路由時回傳前端 SPA 頁面
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "my-vue-app/dist/index.html"));
 });

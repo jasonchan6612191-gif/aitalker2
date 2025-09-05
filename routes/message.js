@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const messageController = require("../messageController");
+const messageController = require("../controllers/messageController");
 
 router.get("/", async (req, res) => {
   try {

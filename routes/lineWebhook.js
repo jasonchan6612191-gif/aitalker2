@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-const faqController = require("./faqController");
+const faqController = require("../controllers/faqController");
 
-// LINE Channel Access Token，請改成自己的
+// LINE Channel Access Token，請設定為你的
 const LINE_ACCESS_TOKEN =
   process.env.LINE_ACCESS_TOKEN || "你的LINE_CHANNEL_ACCESS_TOKEN";
 
@@ -14,7 +14,15 @@ router.post("/", async (req, res) => {
     if (event.type === "message" && event.message.type === "text") {
       const userMsg = event.message.text.toLowerCase();
       const replyToken = event.replyToken;
-      const replyMsg = faqController.getAnswer(userMsg);
+
+      // 非同步取得回覆
+      let replyMsg;
+      try {
+        replyMsg = await faqController.getAnswer(userMsg);
+      } catch (error) {
+        console.error("取得 FAQ 回答錯誤:", error);
+        replyMsg = "抱歉，系統發生錯誤，請稍後再試。";
+      }
 
       try {
         await axios.post(
@@ -39,6 +47,7 @@ router.post("/", async (req, res) => {
       }
     }
   }
+
   res.status(200).send("OK");
 });
 

@@ -1,24 +1,33 @@
-let faqs = [
-  { id: 1, question: "服務時間？", answer: "週一至週五 9:00-18:00" },
-  { id: 2, question: "如何聯絡客服？", answer: "請使用 LINE 或 WhatsApp 聯絡" },
-];
+const Faq = require("../model/faqModel");
 
-function getAllFaqs() {
-  return faqs;
+async function getAllFaqs() {
+  try {
+    return await Faq.find();
+  } catch (error) {
+    console.error("取得 FAQ 錯誤:", error);
+    throw error;
+  }
 }
 
-function addFaq(question, answer) {
-  const newFaq = {
-    id: faqs.length ? faqs[faqs.length - 1].id + 1 : 1,
-    question,
-    answer,
-  };
-  faqs.push(newFaq);
+async function addFaq(question, answer) {
+  try {
+    const faq = new Faq({ question, answer });
+    return await faq.save();
+  } catch (error) {
+    console.error("新增 FAQ 錯誤:", error);
+    throw error;
+  }
 }
 
-function getAnswer(userMsg) {
-  const faq = faqs.find((f) => userMsg.includes(f.question));
-  return faq ? faq.answer : "抱歉，我沒聽懂你的問題。";
+async function getAnswer(userMsg) {
+  try {
+    const faqs = await Faq.find();
+    const found = faqs.find((f) => userMsg.includes(f.question));
+    return found ? found.answer : "抱歉，我沒聽懂你的問題。";
+  } catch (error) {
+    console.error("取得 FAQ 回答錯誤:", error);
+    return "抱歉，系統發生錯誤，請稍後再試。";
+  }
 }
 
 module.exports = {
